@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+requests
+pydantic
+pdfplumber
+PyPDF2
+python-docx
+python-pptx
+pdf2image
+pytesseract
+Pillow
+tiktoken

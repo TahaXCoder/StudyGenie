@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #050505;
+  --surface-color: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --primary: #8B5CF6;
+  --primary-glow: rgba(139, 92, 246, 0.3);
+  --secondary: #EC4899;
+  --accent: #10B981;
+  --text-main: #F3F4F6;
+  --text-muted: #9CA3AF;
+  --sidebar-width: 280px;
+  --header-height: 70px;
+  --glass-blur: 12px;
+  --toast-bg: #1f1f1f;
+  --toast-color: #ffffff;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme='light'] {
+  --bg-color: #F9FAFB;
+  --surface-color: rgba(0, 0, 0, 0.02);
+  --surface-hover: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.08);
+  --primary: #7C3AED;
+  --primary-glow: rgba(124, 58, 237, 0.2);
+  --secondary: #DB2777;
+  --accent: #059669;
+  --text-main: #111827;
+  --text-muted: #6B7280;
+  --toast-bg: #ffffff;
+  --toast-color: #111827;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+h1, h2, h3, h4, .brand {
+  font-family: 'Outfit', sans-serif;
+}
+
+.glass {
+  background: var(--surface-color);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-color);
+}
+
+.glow-button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.glow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px var(--primary-glow);
+  filter: brightness(1.1);
+}
+
+.glow-button:active {
+  transform: translateY(0);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-hover);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, 20px); }
+  100% { transform: translate(0, 0); }
+}
+
+.animate-float {
+  animation: float 10s ease-in-out infinite;
+}

@@ -1,0 +1,58 @@
+import os
+import requests
+import time
+from dotenv import load_dotenv
+
+load_dotenv()
+
+CF_API_TOKEN = os.getenv("CLOUDFLARE_API_TOKEN")
+CF_ACCOUNT_ID = os.getenv("CLOUDFLARE_ACCOUNT_ID")
+INDEX_NAME = "studygenie-index"
+
+def reset_vectorize_index():
+    headers = {
+        "Authorization": f"Bearer {CF_API_TOKEN}",
+        "Content-Type": "application/json"
+    }
+
+    # 1. Delete the index
+    print(f"🗑️ Deleting Vectorize Index: '{INDEX_NAME}'...")
+    delete_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/vectorize/v2/indexes/{INDEX_NAME}"
+    
+    response = requests.delete(delete_url, headers=headers)
+    
+    if response.status_code == 200:
+        print("✅ Index deleted successfully!")
+    elif response.status_code == 404:
+        print("ℹ️ Index didn't exist anyway.")
+    else:
+        print(f"❌ Failed to delete index. Status: {response.status_code}")
+        print(response.text)
+        return
+
+    # 2. Wait for Cloudflare to propagate
+    print("⏳ Waiting for 5 seconds...")
+    time.sleep(5)
+
+    # 3. Recreate the index
+    print(f"✨ Recreating Vectorize Index: '{INDEX_NAME}'...")
+    create_url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/vectorize/v2/indexes"
+    
+    payload = {
+        "name": INDEX_NAME,
+        "config": {
+            "dimensions": 768,
+            "metric": "cosine"
+        }
+    }
+    
+    response = requests.post(create_url, headers=headers, json=payload)
+    
+    if response.status_code in [200, 201]:
+        print("✅ Index recreated successfully! Your sources are now cleared.")
+    else:
+        print(f"❌ Failed to recreate index. Status: {response.status_code}")
+        print(response.text)
+
+if __name__ == "__main__":
+    reset_vectorize_index()

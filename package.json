@@ -1,0 +1,22 @@
+{
+  "name": "studygenie",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "frontend": "npm run dev --prefix frontend",
+    "backend": "cd backend && .\\.venv\\Scripts\\python -m uvicorn main:app --reload",
+    "dev": "concurrently \"npm run frontend\" \"npm run backend\"",
+    "build": "npm run build --prefix frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
