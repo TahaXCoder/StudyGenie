@@ -45,7 +45,10 @@ async def upload_document(request: Request, file: UploadFile = File(...)):
             # Format vectors for Vectorize insert
             vectors = []
             for j, (chunk_data, embedding) in enumerate(zip(batch, embeddings)):
-                safe_filename = file.filename.replace(".", "_")
+                # Vectorize IDs must be alphanumeric, underscores, or hyphens only
+                import re
+                safe_filename = re.sub(r'[^a-zA-Z0-9_\-]', '_', file.filename)
+                
                 vectors.append({
                     "id": f"{safe_filename}_{uuid.uuid4().hex[:8]}",
                     "values": embedding,

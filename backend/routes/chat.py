@@ -67,6 +67,11 @@ async def chat_endpoint(request: ChatRequest):
         cf_response = stream_chat(messages)
         print(f"DEBUG: Cloudflare Response Status: {cf_response.status_code}")
         
+        if cf_response.status_code != 200:
+            error_detail = cf_response.text
+            print(f"DEBUG: Cloudflare Error: {error_detail}")
+            raise HTTPException(status_code=cf_response.status_code, detail=f"Cloudflare AI Error: {error_detail}")
+
         async def event_generator():
             # First, send the sources so the frontend can display them instantly
             sources_event = {

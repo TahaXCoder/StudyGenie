@@ -12,3 +12,4 @@ pdf2image
 pytesseract
 Pillow
 tiktoken
+langchain-text-splitters
