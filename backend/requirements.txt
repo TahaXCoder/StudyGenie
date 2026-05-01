@@ -3,6 +3,7 @@ uvicorn
 python-multipart
 python-dotenv
 requests
+httpx
 pydantic
 pdfplumber
 PyPDF2
