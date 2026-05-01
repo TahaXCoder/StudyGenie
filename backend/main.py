@@ -3,6 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from dotenv import load_dotenv
 import os
+import sys
+
+# Ensure repo root is on sys.path for package imports when running as a script
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(0, PROJECT_ROOT)
 
 # Load .env if it exists (local development)
 if os.path.exists(os.path.join(os.path.dirname(__file__), "..", ".env")):
@@ -10,7 +16,7 @@ if os.path.exists(os.path.join(os.path.dirname(__file__), "..", ".env")):
 else:
     load_dotenv() # Fallback to standard loading
 
-from routes import upload, chat
+from backend.routes import upload, chat
 
 app = FastAPI(title="StudyGenie API")
 

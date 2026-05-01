@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
-from services.cloudflare import get_embeddings, search_vectors, stream_chat
+from backend.services.cloudflare import get_embeddings, search_vectors, stream_chat
 import os
 import requests
 import time
@@ -93,7 +93,7 @@ async def chat_endpoint(request: ChatRequest):
         print(f"DEBUG: Sending to Cloudflare: {safe_messages}")
         
         # 4. Async Stream response from Cloudflare
-        from services.cloudflare import async_stream_chat, CF_ACCOUNT_ID, CF_API_TOKEN
+        from backend.services.cloudflare import async_stream_chat, CF_ACCOUNT_ID, CF_API_TOKEN
         
         if not CF_ACCOUNT_ID or not CF_API_TOKEN:
              print("DEBUG: ERROR - Cloudflare credentials missing!")
@@ -108,7 +108,7 @@ async def chat_endpoint(request: ChatRequest):
             
             try:
                 import httpx
-                from services.cloudflare import async_stream_chat
+                from backend.services.cloudflare import async_stream_chat
                 
                 # We manage the client lifecycle here
                 async with httpx.AsyncClient(timeout=60.0) as client:

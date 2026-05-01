@@ -1,8 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 import uuid
 
-from services.extractor import extract_text_from_bytes, chunk_text
-from services.cloudflare import get_embeddings, insert_vectors
+from backend.services.extractor import extract_text_from_bytes, chunk_text
+from backend.services.cloudflare import get_embeddings, insert_vectors
 
 router = APIRouter()
 
