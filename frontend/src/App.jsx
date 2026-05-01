@@ -37,12 +37,8 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Initial load: clear guest data
-  React.useEffect(() => {
-    if (!user) {
-      resetIndex().catch(console.error);
-    }
-  }, []);
+  // Removed auto-reset on initial load to prevent Vectorize propagation delays
+  // The index will now only clear when handleNewSession is manually triggered.
 
   // Keyboard Shortcuts
   useHotkeys('ctrl+k', (e) => {

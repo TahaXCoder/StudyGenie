@@ -1,5 +1,6 @@
 import os
 import requests
+import httpx
 import logging
 from dotenv import load_dotenv
 
@@ -22,7 +23,7 @@ def get_headers():
 def get_embeddings(texts: list) -> list:
     """Get embeddings from Cloudflare Workers AI"""
     url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{EMBED_MODEL}"
-    response = requests.post(url, headers=get_headers(), json={"text": texts})
+    response = requests.post(url, headers=get_headers(), json={"text": texts}, timeout=60)
     response.raise_for_status()
     return response.json()["result"]["data"]
 
@@ -40,7 +41,7 @@ def insert_vectors(vectors: list):
         "Content-Type": "application/x-ndjson"
     }
     
-    response = requests.post(url, headers=headers, data=ndjson_data)
+    response = requests.post(url, headers=headers, data=ndjson_data, timeout=60)
     if response.status_code != 200:
         logger.error(f"Vectorize Insert Error: {response.text}")
     response.raise_for_status()
@@ -54,7 +55,7 @@ def search_vectors(query_vector: list, top_k: int = 5):
         "topK": top_k,
         "returnMetadata": "all"
     }
-    response = requests.post(url, headers=get_headers(), json=payload)
+    response = requests.post(url, headers=get_headers(), json=payload, timeout=60)
     if response.status_code != 200:
         logger.error(f"Vectorize Query Error: {response.text}")
     response.raise_for_status()
@@ -68,6 +69,15 @@ def stream_chat(messages: list):
         "max_tokens": 1024,
         "stream": True
     }
-    response = requests.post(url, headers=get_headers(), json=payload, stream=True)
+    response = requests.post(url, headers=get_headers(), json=payload, stream=True, timeout=60)
     response.raise_for_status()
     return response
+async def async_stream_chat(client: httpx.AsyncClient, messages: list):
+    """Stream chat response from Cloudflare Workers AI asynchronously"""
+    url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT_ID}/ai/run/{CHAT_MODEL}"
+    payload = {
+        "messages": messages,
+        "max_tokens": 1024,
+        "stream": True
+    }
+    return client.stream("POST", url, headers=get_headers(), json=payload)

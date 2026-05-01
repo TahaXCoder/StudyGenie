@@ -23,6 +23,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def log_requests(request, call_next):
+    print(f"DEBUG: Incoming {request.method} request to {request.url.path}")
+    response = await call_next(request)
+    print(f"DEBUG: Response status: {response.status_code}")
+    return response
+
 # Routing inclusion
 app.include_router(upload.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")

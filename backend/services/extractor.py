@@ -12,11 +12,12 @@ def extract_text_from_bytes(file_bytes: bytes, filename: str) -> str:
     text = ""
     
     if ext == "pdf":
-        pdf_reader = PyPDF2.PdfReader(io.BytesIO(file_bytes))
-        for page in pdf_reader.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text + "\n"
+        import pdfplumber
+        with pdfplumber.open(io.BytesIO(file_bytes)) as pdf:
+            for page in pdf.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text + "\n"
     elif ext == "docx":
         doc = docx.Document(io.BytesIO(file_bytes))
         text = "\n".join([p.text for p in doc.paragraphs if p.text.strip()])
